@@ -26,6 +26,8 @@ Vue.component('users-form', require('./components/users/UsersForm').default);
 Vue.component('companies', require('./components/companies/Companies').default);
 Vue.component('companies-form', require('./components/companies/CompaniesForm').default);
 
+Vue.component('search', require('./components/common/Search').default);
+
 
 /**
  * Init Vue App.

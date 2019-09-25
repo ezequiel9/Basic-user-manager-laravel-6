@@ -15,6 +15,11 @@
 
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ml-auto">
+                @if(Auth::check())
+                    <li>
+                        <search></search>
+                    </li>
+                @endif
                 <!-- Authentication Links -->
                 @guest
                     <li class="nav-item">

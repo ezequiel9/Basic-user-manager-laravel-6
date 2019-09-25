@@ -15,6 +15,7 @@
 Auth::routes();
 
 Route::get('/', 'DashboardController@index')->name('home');
+Route::post('/search', 'DashboardController@search')->name('search');
 
 
 
