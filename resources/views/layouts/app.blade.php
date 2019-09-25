@@ -23,13 +23,14 @@
         @include('layouts.header')
 
         <main>
-            @yield('content')
+            @yield('app-content')
         </main>
 
         @include('layouts.footer')
     </div>
 
     <!-- Scripts -->
+    @routes
     <script src="{{ mix('js/app.js') }}" defer></script>
 </body>
 </html>

@@ -2,5 +2,5 @@
 
 @section('content')
     {{--Get dashboard component--}}
-    <dashboard :user="{{$user->toJson()}}"></dashboard>
+    <users :current_user="{{$current_user->toJson()}}"></users>
 @endsection

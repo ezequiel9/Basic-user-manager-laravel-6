@@ -15,3 +15,10 @@
 Auth::routes();
 
 Route::get('/', 'DashboardController@index')->name('home');
+
+
+
+Route::resources([
+    'users' => 'UserController',
+    'companies' => 'CompanyController'
+]);

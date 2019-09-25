@@ -1,1 +1,34 @@
 //
+
+.d-flex{
+    min-height: 500px;
+    #sidebar-wrapper{
+        background-color: $indigo;
+        width: 15rem;
+        h5{
+            padding: 15px;
+            color: white;
+            font-weight: 600;
+        }
+        ul{
+            list-style: none;
+            padding-left: 0;
+            li{
+                padding: 5px 15px;
+                border-bottom: 1px solid #5a68bf;
+                a{
+                    color: white;
+                    &:hover{
+                        color: $dark;
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+    }
+    #content-wrapper{
+        width: 100%;
+        height: 100%;
+        padding: 15px;
+    }
+}

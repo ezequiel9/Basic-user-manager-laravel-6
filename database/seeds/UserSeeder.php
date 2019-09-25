@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use \App\Models\Company;
 
 class UserSeeder extends Seeder
 {
@@ -12,6 +13,8 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
+
+        Company::query()->delete();
         User::query()->delete();
         User::create([
             'name' => 'Ezequiel',
@@ -30,6 +33,6 @@ class UserSeeder extends Seeder
         /**
          * Let's create 10 employees
          */
-        factory(User::class, 10)->create();
+        factory(User::class, 50)->create();
     }
 }

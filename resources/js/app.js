@@ -19,6 +19,13 @@ Vue.use(BootstrapVue);
  */
 Vue.component('dashboard', require('./components/Dashboard').default);
 
+// users
+Vue.component('users', require('./components/users/Users').default);
+Vue.component('users-form', require('./components/users/UsersForm').default);
+
+Vue.component('companies', require('./components/companies/Companies').default);
+
+
 /**
  * Init Vue App.
  */
