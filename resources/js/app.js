@@ -24,6 +24,7 @@ Vue.component('users', require('./components/users/Users').default);
 Vue.component('users-form', require('./components/users/UsersForm').default);
 
 Vue.component('companies', require('./components/companies/Companies').default);
+Vue.component('companies-form', require('./components/companies/CompaniesForm').default);
 
 
 /**

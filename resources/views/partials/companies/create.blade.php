@@ -2,5 +2,5 @@
 
 @section('content')
     {{--Get dashboard component--}}
-    <companies :current_user="{{$current_user->toJson()}}"></companies>
+    <companies-form :current_user="{{$current_user->toJson()}}" :company="{}"></companies-form>
 @endsection

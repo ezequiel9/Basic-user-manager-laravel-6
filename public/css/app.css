@@ -18803,41 +18803,84 @@ readers do not read off random characters that represent icons */
   width: auto;
 }
 
-.d-flex {
+body.login,
+body.register,
+body.register,
+body.passwordrequest {
+  height: 100vh;
+}
+
+body.login #app,
+body.register #app,
+body.register #app,
+body.passwordrequest #app {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+}
+
+body.login #app .card,
+body.register #app .card,
+body.register #app .card,
+body.passwordrequest #app .card {
+  margin: 50px auto;
+}
+
+body.login #app footer,
+body.register #app footer,
+body.register #app footer,
+body.passwordrequest #app footer {
+  margin-top: auto;
+}
+
+body #app {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+body #app #wrapper {
+  width: 100%;
+  height: 100%;
+  flex: 1;
+}
+
+body #app #wrapper.d-flex {
   min-height: 500px;
 }
 
-.d-flex #sidebar-wrapper {
+body #app #wrapper.d-flex #sidebar-wrapper {
   background-color: #6574cd;
   width: 15rem;
 }
 
-.d-flex #sidebar-wrapper h5 {
+body #app #wrapper.d-flex #sidebar-wrapper h5 {
   padding: 15px;
   color: white;
   font-weight: 600;
 }
 
-.d-flex #sidebar-wrapper ul {
+body #app #wrapper.d-flex #sidebar-wrapper ul {
   list-style: none;
   padding-left: 0;
 }
 
-.d-flex #sidebar-wrapper ul li {
+body #app #wrapper.d-flex #sidebar-wrapper ul li {
   padding: 5px 15px;
   border-bottom: 1px solid #5a68bf;
 }
 
-.d-flex #sidebar-wrapper ul li a {
+body #app #wrapper.d-flex #sidebar-wrapper ul li a {
   color: white;
 }
 
-.d-flex #sidebar-wrapper ul li a:hover {
+body #app #wrapper.d-flex #sidebar-wrapper ul li a:hover {
   color: #343a40;
   text-decoration: none;
 }
 
-.d-flex #content-wrapper {
+body #app #wrapper.d-flex #content-wrapper {
   width: 100%;
   height: 100%;
   padding: 15px;

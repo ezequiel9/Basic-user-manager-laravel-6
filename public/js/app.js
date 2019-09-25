@@ -5533,6 +5533,128 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    current_user: {
+      "default": {},
+      type: Object
+    }
+  },
+  data: function data() {
+    return {
+      companies: [],
+      page: 1
+    };
+  },
+  mounted: function mounted() {
+    this.loadCompanies(this.page);
+  },
+  methods: {
+    loadCompanies: function loadCompanies(page) {
+      var _this = this;
+
+      axios.get(route('companies.index'), {
+        params: {
+          page: page
+        }
+      }).then(function (response) {
+        console.log(response.data);
+        _this.companies = [].concat(_toConsumableArray(_this.companies), _toConsumableArray(response.data.data));
+
+        if (response.data.last_page <= _this.page) {
+          _this.page = false;
+        } else {
+          _this.page++;
+        }
+      })["catch"](function (err) {
+        return console.log(err);
+      });
+    },
+    canEditOrDelete: function canEditOrDelete(company) {
+      if (this.current_user.role === 'administrator') {
+        return true;
+      }
+
+      return false;
+    },
+    deleteCompany: function deleteCompany(company, index) {
+      var self = this;
+      alertify.confirm("Do you want to delete this company?", function () {
+        axios["delete"](route('companies.destroy', {
+          company: company.id
+        }).url()).then(function (response) {
+          console.log(response);
+          alertify.success('Company deleted Successfully.');
+          self.companies.splice(index, 1); //window.location.reload();
+        })["catch"](function (error) {
+          console.log('error', error);
+          alertify.alert('sorry, we could not delete the company. please try again');
+        });
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/companies/CompaniesForm.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/companies/CompaniesForm.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
 //
 //
 //
@@ -5571,8 +5693,55 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    company: {
+      "default": {},
+      type: Object
+    },
+    current_user: {
+      "default": {},
+      type: Object
+    }
+  },
+  data: function data() {
+    return {
+      isEdit: Object.keys(this.company).length > 0,
+      author: null
+    };
+  },
   mounted: function mounted() {
-    console.log('Component mounted.');
+    if (!this.currentUserIsAdmin()) {
+      window.redirect('/');
+    }
+  },
+  computed: {},
+  methods: {
+    currentUserIsAdmin: function currentUserIsAdmin() {
+      return this.current_user.role === 'administrator';
+    },
+    onSubmit: function onSubmit() {
+      if (!this.isEdit) {
+        this.company.user_id = this.current_user.id;
+      }
+
+      if (this.isEdit) {
+        axios.patch(route('companies.update', {
+          company: this.company.id
+        }).url(), this.company).then(function (response) {
+          alertify.success('User updated Successfully.');
+          window.location.reload();
+        })["catch"](function (error) {
+          alertify.alert('sorry, we could not update the user this time, please review your data. Error details: ' + error.message);
+        });
+      } else {
+        axios.post(route('companies.store'), this.company).then(function (response) {
+          alertify.success('User created Successfully.');
+          window.location.replace("/companies/".concat(response.data.id, "/edit"));
+        })["catch"](function (error) {
+          alertify.alert('sorry, we could not create the user this time. please try again');
+        });
+      }
+    }
   }
 });
 
@@ -5706,14 +5875,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
 //
 //
 //
@@ -5783,7 +5944,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   },
   mounted: function mounted() {
     if (!this.currentUserIsAdmin() && this.editUserIsAdmin()) {
-      window.redirect(route('users.index'));
+      window.location.replace(route('users.index'));
     }
   },
   computed: {
@@ -5802,26 +5963,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     }
   },
   methods: {
-    loadUsers: function loadUsers(page) {
-      var _this = this;
-
-      axios.get(route('users.index'), {
-        params: {
-          page: page
-        }
-      }).then(function (response) {
-        console.log(response.data);
-        _this.users = [].concat(_toConsumableArray(_this.users), _toConsumableArray(response.data.data));
-
-        if (response.data.last_page <= _this.page) {
-          _this.page = false;
-        } else {
-          _this.page++;
-        }
-      })["catch"](function (err) {
-        return console.log(err);
-      });
-    },
     currentUserIsAdmin: function currentUserIsAdmin() {
       return this.current_user.role === 'administrator';
     },
@@ -69875,64 +70016,260 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "list" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("table", { staticClass: "table" }, [
+      _vm._m(1),
+      _vm._v(" "),
+      _c(
+        "tbody",
+        _vm._l(_vm.companies, function(company, index) {
+          return _c("tr", [
+            _c("th", { attrs: { scope: "row" } }, [_vm._v(_vm._s(company.id))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(company.name))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(company.website))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(company.location))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(company.author.name))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(company.created_at))]),
+            _vm._v(" "),
+            _c("td", [
+              _c("div", [
+                _vm.canEditOrDelete(company)
+                  ? _c(
+                      "a",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: { href: "/companies/" + company.id + "/edit" }
+                      },
+                      [_vm._v("Edit")]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.canEditOrDelete(company)
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger",
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteCompany(company, index)
+                          }
+                        }
+                      },
+                      [_vm._v("Delete")]
+                    )
+                  : _vm._e()
+              ])
+            ])
+          ])
+        }),
+        0
+      )
+    ]),
+    _vm._v(" "),
+    _vm.page
+      ? _c(
+          "button",
+          {
+            staticClass: "btn btn-dark",
+            on: {
+              click: function($event) {
+                return _vm.loadCompanies(_vm.page)
+              }
+            }
+          },
+          [_vm._v("Load more")]
+        )
+      : _vm._e()
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "list" }, [
-      _c("h2", [_vm._v("Companies")]),
-      _vm._v(" "),
-      _c("table", { staticClass: "table" }, [
-        _c("thead", [
-          _c("tr", [
-            _c("th", { attrs: { scope: "col" } }, [_vm._v("#")]),
-            _vm._v(" "),
-            _c("th", { attrs: { scope: "col" } }, [_vm._v("First")]),
-            _vm._v(" "),
-            _c("th", { attrs: { scope: "col" } }, [_vm._v("Last")]),
-            _vm._v(" "),
-            _c("th", { attrs: { scope: "col" } }, [_vm._v("Handle")])
-          ])
-        ]),
+    return _c("h2", [
+      _vm._v("Companies "),
+      _c(
+        "a",
+        {
+          staticClass: "btn btn-success",
+          attrs: { href: "/companies/create" }
+        },
+        [_vm._v("Add new")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("ID")]),
         _vm._v(" "),
-        _c("tbody", [
-          _c("tr", [
-            _c("th", { attrs: { scope: "row" } }, [_vm._v("1")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Mark")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Otto")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("@mdo")])
-          ]),
-          _vm._v(" "),
-          _c("tr", [
-            _c("th", { attrs: { scope: "row" } }, [_vm._v("2")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Jacob")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Thornton")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("@fat")])
-          ]),
-          _vm._v(" "),
-          _c("tr", [
-            _c("th", { attrs: { scope: "row" } }, [_vm._v("3")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Larry")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("the Bird")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("@twitter")])
-          ])
-        ])
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Website")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Location")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Author")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Created at")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Actions")])
       ])
     ])
   }
 ]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/companies/CompaniesForm.vue?vue&type=template&id=56b651f0&":
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/companies/CompaniesForm.vue?vue&type=template&id=56b651f0& ***!
+  \**************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "list" },
+    [
+      _vm.isEdit
+        ? _c("h2", [_vm._v("Edit " + _vm._s(_vm.company.name))])
+        : _c("h2", [_vm._v("Add new company")]),
+      _vm._v(" "),
+      _c(
+        "b-form",
+        {
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.onSubmit($event)
+            }
+          }
+        },
+        [
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "name",
+                label: "Company name:",
+                "label-for": "name",
+                description: "Please input a company name"
+              }
+            },
+            [
+              _c("b-form-input", {
+                attrs: {
+                  id: "name",
+                  type: "text",
+                  required: "",
+                  placeholder: "Enter company name"
+                },
+                model: {
+                  value: _vm.company.name,
+                  callback: function($$v) {
+                    _vm.$set(_vm.company, "name", $$v)
+                  },
+                  expression: "company.name"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "website",
+                label: "Webiste:",
+                "label-for": "website",
+                description: "Please enter a valid website"
+              }
+            },
+            [
+              _c("b-form-input", {
+                attrs: {
+                  id: "website",
+                  type: "text",
+                  required: "",
+                  placeholder: "Enter website"
+                },
+                model: {
+                  value: _vm.company.website,
+                  callback: function($$v) {
+                    _vm.$set(_vm.company, "website", $$v)
+                  },
+                  expression: "company.website"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-form-group",
+            {
+              attrs: {
+                id: "location",
+                label: "Company location:",
+                "label-for": "location",
+                description: "Please enter a location"
+              }
+            },
+            [
+              _c("b-form-input", {
+                attrs: {
+                  id: "location",
+                  type: "text",
+                  required: "",
+                  placeholder: "Enter the location"
+                },
+                model: {
+                  value: _vm.company.location,
+                  callback: function($$v) {
+                    _vm.$set(_vm.company, "location", $$v)
+                  },
+                  expression: "company.location"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("b-button", { attrs: { type: "submit", variant: "primary" } }, [
+            _vm._v("Submit")
+          ])
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -82391,6 +82728,7 @@ Vue.component('dashboard', __webpack_require__(/*! ./components/Dashboard */ "./
 Vue.component('users', __webpack_require__(/*! ./components/users/Users */ "./resources/js/components/users/Users.vue")["default"]);
 Vue.component('users-form', __webpack_require__(/*! ./components/users/UsersForm */ "./resources/js/components/users/UsersForm.vue")["default"]);
 Vue.component('companies', __webpack_require__(/*! ./components/companies/Companies */ "./resources/js/components/companies/Companies.vue")["default"]);
+Vue.component('companies-form', __webpack_require__(/*! ./components/companies/CompaniesForm */ "./resources/js/components/companies/CompaniesForm.vue")["default"]);
 /**
  * Init Vue App.
  */
@@ -82600,6 +82938,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Companies_vue_vue_type_template_id_3d8b85e8___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Companies_vue_vue_type_template_id_3d8b85e8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/companies/CompaniesForm.vue":
+/*!*************************************************************!*\
+  !*** ./resources/js/components/companies/CompaniesForm.vue ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _CompaniesForm_vue_vue_type_template_id_56b651f0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CompaniesForm.vue?vue&type=template&id=56b651f0& */ "./resources/js/components/companies/CompaniesForm.vue?vue&type=template&id=56b651f0&");
+/* harmony import */ var _CompaniesForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CompaniesForm.vue?vue&type=script&lang=js& */ "./resources/js/components/companies/CompaniesForm.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _CompaniesForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _CompaniesForm_vue_vue_type_template_id_56b651f0___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _CompaniesForm_vue_vue_type_template_id_56b651f0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/companies/CompaniesForm.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/companies/CompaniesForm.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/companies/CompaniesForm.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CompaniesForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./CompaniesForm.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/companies/CompaniesForm.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CompaniesForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/companies/CompaniesForm.vue?vue&type=template&id=56b651f0&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/companies/CompaniesForm.vue?vue&type=template&id=56b651f0& ***!
+  \********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CompaniesForm_vue_vue_type_template_id_56b651f0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./CompaniesForm.vue?vue&type=template&id=56b651f0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/companies/CompaniesForm.vue?vue&type=template&id=56b651f0&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CompaniesForm_vue_vue_type_template_id_56b651f0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CompaniesForm_vue_vue_type_template_id_56b651f0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

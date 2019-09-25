@@ -22,9 +22,7 @@
     <div id="app">
         @include('layouts.header')
 
-        <main>
-            @yield('app-content')
-        </main>
+        @yield('app-content')
 
         @include('layouts.footer')
     </div>

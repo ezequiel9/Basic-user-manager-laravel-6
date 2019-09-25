@@ -68,7 +68,7 @@
         },
         mounted(){
             if(!this.currentUserIsAdmin() && this.editUserIsAdmin()){
-                window.redirect(route('users.index'));
+                window.location.replace(route('users.index'));
             }
         },
         computed:{
@@ -81,19 +81,6 @@
             },
         },
         methods: {
-            loadUsers(page){
-                axios.get(route('users.index'), {params: { page : page } } )
-                    .then((response) => {
-                        console.log(response.data);
-                        this.users = [...this.users, ...response.data.data];
-                        if(response.data.last_page <= this.page){
-                            this.page = false;
-                        }else{
-                            this.page++;
-                        }
-                    })
-                    .catch(err => (console.log(err)));
-            },
 
             currentUserIsAdmin(){
                 return this.current_user.role === 'administrator'
