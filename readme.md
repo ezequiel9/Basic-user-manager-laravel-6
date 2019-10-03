@@ -7,6 +7,14 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
 
+## Project description
+This is a basic CRUD with some additions. I thinks is a good kick start to create an admin panel. 
+- Users can create organisation and users. 
+- 2 Roles, Admin and Employee. 
+- Created with Vuejs.
+
+
+
 ## Install Project
 - Clone repo
 - set .env 
