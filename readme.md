@@ -2,7 +2,7 @@
 
 
 ## Project description
-This is a basic CRUD with some additions. I thinks is a good kick start to create an admin panel. 
+This is a basic CRUD with some additions. I thinks is a good kick start to create an admin panel or learn how to use Laravel 6. 
 - Users can create organisation and users. 
 - 2 Roles, Admin and Employee. 
 - Created with Vuejs.
